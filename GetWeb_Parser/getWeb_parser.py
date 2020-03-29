@@ -22,6 +22,7 @@ class Getweb_parser:
     First: getPage
     Second: findData
     Third: writeData
+    Fourth: checkFile
 
                     (.) (.)
            \,,/        &       \,,/
@@ -162,6 +163,5 @@ class CheckFile:
         return toWrite
 
 # UWAGI OGÓLNE:
-# poprawić program, żeby był bardziej uniwersalny, czyli na inne strony
-# sprawdzanie błędów [czy strona się wczytała, jeżeli nie to niech ponowi kilka razy]
-# ustawić uruchamianie skryptu np co 5 min
+# improve the program, it will be more universal, to other sites
+# set the program to run every e.g. 5 minutes
