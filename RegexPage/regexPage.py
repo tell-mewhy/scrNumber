@@ -25,6 +25,3 @@ class RegexPage():
         '''Comment'''
         res = re.compile(r'[^<td>]([a-zA-Z0-9_])[</td>]$')
         return res
-
-# lyrics = '12 drummers drumming, 10 pipers piping, 9 lords of leaping'
-# xmasRegex = re.compile(r'\d+\s\w+')
