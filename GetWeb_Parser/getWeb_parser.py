@@ -12,7 +12,7 @@ from RegexPage import regexPage as rp
 
 import logging
 
-logging.basicConfig(filename='/home/pa/github/scrapingNUM/Log/myProgramLog.txt',level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(filename='../scrNumber/Log/myProgramLog.txt',level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 logging.disable(logging.DEBUG)
 # logging.disable(logging.CRITICAL)
 
@@ -128,7 +128,7 @@ class Getweb_parser:
 # GITa podpiąć pod Atom'a
 
 class CheckFile:
-    '''Must check old file if new data was imported earlier'''
+    '''Must check old file if new data was imported earlier.'''
 
     def check(data):
 
