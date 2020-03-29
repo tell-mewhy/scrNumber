@@ -12,7 +12,7 @@ from RegexPage import regexPage as rp
 
 import logging
 
-logging.basicConfig(filename='/home/pa/github/scrapingNUM/Log/myProgramLog.txt',level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(filename='../scrNumber/Log/myProgramLog.txt',level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 logging.disable(logging.DEBUG)
 # logging.disable(logging.CRITICAL)
 
