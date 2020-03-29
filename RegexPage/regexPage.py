@@ -14,10 +14,10 @@ class RegexPage():
         return res
     def regexNumber():
         '''
-        ['579 022 686                ', 'aaa', '1']
+        ['999 999 999                ', 'aaa', '1']
         '''
         #res = re.compile(r'(\d\d\d\s\d\d\d\s\d\d\d)')
-        # >732 084 017                <
+        # >999 999 999                <
         res = re.compile(r"(\d\d\d\s\d\d\d\s\d\d\d)")
         return res
 

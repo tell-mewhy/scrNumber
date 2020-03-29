@@ -22,6 +22,7 @@ class Getweb_parser:
     First: getPage
     Second: findData
     Third: writeData
+    Fourth: checkFile
 
                     (.) (.)
            \,,/        &       \,,/
@@ -36,7 +37,7 @@ class Getweb_parser:
         self.find = '' #find # 'table opinion table-striped'
         self.findall = '' #findall # td
         self.date = datetime.now().strftime("%d-%m-%Y %H:%M")
-        self.type = 'Niebezpieczne'
+        self.type = 'Dangerous'
         self.fileName = 'DangerousNumbers'
         self.part = part
         self.counter = counter
@@ -94,19 +95,20 @@ class Getweb_parser:
                     rov.append([number,comm,link,self.date,self.type])
 
         if self.part == 0:
-            print('\nZapisano {0} numerów/y do pliku.\nStrona {1}'.format(len(rov),self.link))
+            print('\nSave {0} numbers to rov from site: {1}'.format(len(rov),self.link))
         if self.part != 0:
-            print('\nZapisano {0} numerów/y do pliku.\nStrona {1}'.format(len(rov),self.link+'/'+ str(self.part)))
+            print('\nSave {0} numbers to rov from site: {1}'.format(len(rov),self.link+'/'+ str(self.part)))
 
+        # self.part is necessary to one page
         self.part += 100
 
         # Write rows
         Getweb_parser.writeData(self,rov)
 
-        # Zapora żeby nie wczyrtywało 1oooo rekordów
-        if self.part == 300:
-            print('KONIEC')
-            return rov
+        # Don't load more records if you don't need! Uncomment this!
+        # if self.part == 100:
+        #     print('END')
+        #     return rov
 
         if len(rov) <= 6:
             return rov
@@ -115,35 +117,51 @@ class Getweb_parser:
 
     def writeData(self,row):
 
-        f = openFile.file.createFile(self.fileName)
-        f.writerow(['Telefon','Komentarz','Link','Data pobrania',self.type])
-        counter = 0
-        for r in row:
-            counter += 1
-            f.writerow([r[0],r[1],r[2],r[3],r[4]])
-        f.writerow(['WCZYTANO {0} REKORDÓW ZE STRONY: {1}'.format(counter,self.link)])
-
-# Sprawdzanie czy numer był już zaimportowany, jeżeli tak to ma go znowu nie importować
-# Sprawdzić czy to zadziała
-# GITa podpiąć pod Atom'a
+        # Check if rows was earlier load
+        data = CheckFile.check(row)
+        if len(data) == 0:
+            pass
+        else:
+            f = openFile.file.createFile(self.fileName)
+            f.writerow(['Telefon','Komentarz','Link','Data pobrania',self.type])
+            counter = 0
+            for r in data:
+                counter += 1
+                f.writerow([r[0],r[1],r[2],r[3],r[4]])
+            # f.writerow(['WCZYTANO {0} REKORDÓW ZE STRONY: {1}'.format(counter,self.link)])
 
 class CheckFile:
     '''Must check old file if new data was imported earlier.'''
 
     def check(data):
 
-        file = open('DangerousNumbers.csv')
-        f = openFile.file.createFile(self.fileName)
+        try:
+            file = open('DangerousNumbers.csv', mode='r')
+        except:
+            return data
+
+        temp = []
+        for f in file:
+            t = rp.RegexPage.regexNumber().search(str(f))
+            if t:
+                temp.append(t.group())
+
+        toWrite = []
         for r in data:
-            if r in file:
-                pass
-            if r not in file:
-                f.writerow([r[0],r[1],r[2],r[3],r[4]])
+            if temp:
+                if r[0] in temp:
+                    pass
+                else:
+                    toWrite.append([r[0],r[1],r[2],r[3],r[4]])
+            else:
+                toWrite.append([r[0],r[1],r[2],r[3],r[4]])
+
         file.close()
 
+        print('To load: {0}'.format(str(len(toWrite))))
+
+        return toWrite
 
 # UWAGI OGÓLNE:
-# poprawić program, żeby był bardziej uniwersalny, czyli na inne strony
-# sprawdzanie błędów [czy strona się wczytała, jeżeli nie to niech ponowi kilka razy]
-# ogarnąć strukturę programu, żeby było ładnie
-# return findData(self.link)
+# improve the program, it will be more universal, to other sites
+# set the program to run every e.g. 5 minutes
