@@ -126,8 +126,9 @@ class Getweb_parser:
 # Sprawdzanie czy numer był już zaimportowany, jeżeli tak to ma go znowu nie importować
 # Sprawdzić czy to zadziała
 # GITa podpiąć pod Atom'a
+
 class CheckFile:
-    '''Must check old file if new data was imported earlier'''
+    '''Must check old file if new data was imported earlier.'''
 
     def check(data):
 
