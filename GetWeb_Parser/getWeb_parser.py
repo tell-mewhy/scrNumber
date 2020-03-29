@@ -105,8 +105,8 @@ class Getweb_parser:
         # Write rows
         Getweb_parser.writeData(self,rov)
 
-        # Zapora żeby nie wczyrtywało 1oooo rekordów
-        # if self.part == 300:
+        # Don't load more records if you don't need! Uncomment this!
+        # if self.part == 100:
         #     print('END')
         #     return rov
 
