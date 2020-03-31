@@ -106,9 +106,9 @@ class Getweb_parser:
         Getweb_parser.writeData(self,rov)
 
         # Don't load more records if you don't need! Uncomment this!
-        # if self.part == 100:
-        #     print('END')
-        #     return rov
+        if self.part == 100:
+            print('END')
+            return rov
 
         if len(rov) <= 6:
             return rov
