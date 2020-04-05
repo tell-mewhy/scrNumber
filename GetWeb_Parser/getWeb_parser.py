@@ -77,6 +77,7 @@ class Getweb_parser:
 
     def findData(self):
 
+        table_row = Getweb_parser.getPage(self)
         table_rows = Getweb_parser.getPage(self).find_all('tr')
         rov = []
 
