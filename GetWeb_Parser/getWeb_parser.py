@@ -33,7 +33,7 @@ class Getweb_parser:
     def __init__(self,link,part=0,counter=1):
         '''start'''
 
-        self.link = (link)
+        self.link = link
         self.find = '' #find # 'table opinion table-striped'
         self.findall = '' #findall # td
         self.date = datetime.now().strftime("%d-%m-%Y %H:%M")
@@ -57,7 +57,6 @@ class Getweb_parser:
                 page = requests.get(self.link + '/' + str(self.part))
                 page.raise_for_status()
                 soup = bs(page.text, 'html.parser')
-                print(page)
         except:
             if self.counter == 3 and self.part != 0:
                 logging.warn('Cant open site: '+self.link+'/'+str(self.part))
@@ -68,6 +67,7 @@ class Getweb_parser:
                 print("Can't open link: {0}".format(self.link))
                 exit()
 
+            # Wait 5 second and reload page
             sleep(5)
 
             self.counter += 1
@@ -77,7 +77,6 @@ class Getweb_parser:
 
     def findData(self):
 
-        table_row = Getweb_parser.getPage(self)
         table_rows = Getweb_parser.getPage(self).find_all('tr')
         rov = []
 
@@ -94,6 +93,39 @@ class Getweb_parser:
                     if number in rov:
                         continue
                     rov.append([number,comm,link,self.date,self.type])
+
+        # When program don't found data on page then he check p tag and write to file
+        if len(rov) == 0:
+            rows = Getweb_parser.getPage(self).find_all('p')
+            data = []
+            for i in rows:
+                number = rp.RegexPage.regexNumber().search(str(i.get_text()))
+                if number and (number[0][0:4] != (' 000' or '000')):
+                    data.append(number.group())
+
+            # Open and write data to file
+            if len(data) != 0:
+                file = open('PhonesFromWeb.txt', 'a')
+                file.write(self.link + '\n')
+                for i in data:
+                    file.write(i + '\n')
+                file.close()
+                print('The PhonesFromWeb.txt file is updated in the current program folder.\n')
+
+            # While loop to check other sites
+            while True:
+                check = input('\nDo you check other page? [write Y or N and press enter]\n')
+                if isinstance(check, str) == True and check.lower() == 'y':
+                    link = input('Paste link and enter:\n')
+                    if isinstance(link, str) == True:
+                        return Getweb_parser(link,self.part)
+                    else:
+                        print('Wrong link!')
+                if isinstance(check, str) == True and check.lower() == 'n':
+                    print('Thx, bye :)')
+                    exit()
+                else:
+                    print('Wrong data!')
 
         if self.part == 0:
             print('\nSave {0} numbers to rov from site: {1}'.format(len(rov),self.link))
@@ -164,5 +196,4 @@ class CheckFile:
         return toWrite
 
 # UWAGI OGÓLNE:
-# improve the program, it will be more universal, to other sites
 # set the program to run every e.g. 5 minutes
