@@ -33,12 +33,12 @@ class Getweb_parser:
     def __init__(self,link,part=0,counter=1):
         '''start'''
 
-        self.link = (link)
-        self.find = '' #find # 'table opinion table-striped'
-        self.findall = '' #findall # td
+        self.link = link
+        # self.find = '' #find # 'table opinion table-striped'
+        # self.findall = '' #findall # td
         self.date = datetime.now().strftime("%d-%m-%Y %H:%M")
-        self.type = 'Dangerous'
-        self.fileName = 'DangerousNumbers'
+        self.type = 'test'
+        self.fileName = 'PhoneNumbers'
         self.part = part
         self.counter = counter
 
@@ -57,7 +57,6 @@ class Getweb_parser:
                 page = requests.get(self.link + '/' + str(self.part))
                 page.raise_for_status()
                 soup = bs(page.text, 'html.parser')
-                print(page)
         except:
             if self.counter == 3 and self.part != 0:
                 logging.warn('Cant open site: '+self.link+'/'+str(self.part))
@@ -68,6 +67,7 @@ class Getweb_parser:
                 print("Can't open link: {0}".format(self.link))
                 exit()
 
+            # Wait 5 second and reload page
             sleep(5)
 
             self.counter += 1
@@ -77,6 +77,7 @@ class Getweb_parser:
 
     def findData(self):
 
+        # First checking page
         table_rows = Getweb_parser.getPage(self).find_all('tr')
         rov = []
 
@@ -94,24 +95,57 @@ class Getweb_parser:
                         continue
                     rov.append([number,comm,link,self.date,self.type])
 
-        if self.part == 0:
-            print('\nSave {0} numbers to rov from site: {1}'.format(len(rov),self.link))
-        if self.part != 0:
-            print('\nSave {0} numbers to rov from site: {1}'.format(len(rov),self.link+'/'+ str(self.part)))
+        # When program don't found data on page then he check p tag and write to file
+        if len(rov) == 0:
+            rows = Getweb_parser.getPage(self).find_all('p')
+            data = []
+            for i in rows:
+                number = rp.RegexPage.regexNumber().search(str(i.get_text()))
+                if number and (number[0][0:4] != (' 000' or '000')):
+                    data.append(number.group())
 
-        # self.part is necessary to one page
-        self.part += 100
+            # Open and write data to file
+            if len(data) != 0:
+                file = open('PhonesFromWeb.txt', 'a')
+                file.write(self.link + '\n')
+                for i in data:
+                    file.write(i + '\n')
+                file.close()
+                print('The PhonesFromWeb.txt file is updated in the current program folder.\n')
+
+            # While loop to check other sites if you need
+            while True:
+                check = input('\nDo you check other page? [write Y or N and press enter]\n')
+                if isinstance(check, str) == True and check.lower() == 'y':
+                    link = input('Paste link and press enter:\n')
+                    if isinstance(link, str) == True:
+                        return Getweb_parser(link,self.part)
+                    else:
+                        print('Wrong link!')
+                if isinstance(check, str) == True and check.lower() == 'n':
+                    print('Thx, bye :)')
+                    exit()
+                else:
+                    print('Wrong data!')
+
+        if self.part == 0:
+            print('\nLoad {0} numbers to rov from site: {1}\n'.format(len(rov),self.link))
+        if self.part != 0:
+            print('\nLoad {0} numbers to rov from site: {1}\n'.format(len(rov),self.link+'/'+ str(self.part)))
 
         # Write rows
         Getweb_parser.writeData(self,rov)
 
-        # Don't load more records if you don't need! Uncomment this!
-        # if self.part == 100:
-        #     print('END')
-        #     return rov
+        # self.part is necessary to one page
+        self.part += 100
 
-        if len(rov) <= 6:
+        # Don't load more records if you don't need! Uncomment this!
+        if self.part == 100:
+            print('END')
             return rov
+
+        # if len(rov) <= 6:
+        #     return rov
         if len(rov) > 6:
             return Getweb_parser(self.link,self.part)
 
@@ -123,12 +157,11 @@ class Getweb_parser:
             pass
         else:
             f = openFile.file.createFile(self.fileName)
-            f.writerow(['Telefon','Komentarz','Link','Data pobrania',self.type])
+            f.writerow(['Phone','Comment','Link','Date',self.type])
             counter = 0
             for r in data:
                 counter += 1
                 f.writerow([r[0],r[1],r[2],r[3],r[4]])
-            # f.writerow(['WCZYTANO {0} REKORDÓW ZE STRONY: {1}'.format(counter,self.link)])
 
 class CheckFile:
     '''Must check old file if new data was imported earlier.'''
@@ -136,7 +169,7 @@ class CheckFile:
     def check(data):
 
         try:
-            file = open('DangerousNumbers.csv', mode='r')
+            file = open('PhoneNumbers.csv', mode='r')
         except:
             return data
 
@@ -158,10 +191,14 @@ class CheckFile:
 
         file.close()
 
-        print('To load: {0}'.format(str(len(toWrite))))
+        if len(toWrite) == 0:
+            print('You already have all the numbers from this page.')
+        elif len(data) != len(toWrite):
+            print('{0} records are already in the file'.format(str(int(len(data) - len(toWrite)))))
+        if toWrite:
+            print('To saving {0} record(s) to file'.format(str(len(toWrite))))
 
         return toWrite
 
 # UWAGI OGÓLNE:
-# improve the program, it will be more universal, to other sites
 # set the program to run every e.g. 5 minutes

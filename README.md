@@ -1,5 +1,5 @@
 # scrNumber
-Scraping dangerous numbers
+Scraping test numbers
 
 This my first scraping project.
 This program scraping numbers from one page with comments and links to this numbers. 

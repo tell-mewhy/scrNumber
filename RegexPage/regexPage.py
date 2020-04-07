@@ -6,19 +6,12 @@ from GetWeb_Parser import getWeb_parser
 class RegexPage():
     '''Place to configure regex.'''
 
-    def regexPage():
-        '''Number'''
-        #res = re.compile(r'(\d\d\d\s\d\d\d\s\d\d\d)')
-        # >732 084 017                <
-        res = re.compile(r'>(\d\d\d\s\d\d\d\s\d\d\d\s+)<|(\d\d\d\d\d\d\d\d\d)')
-        return res
     def regexNumber():
-        '''
-        ['999 999 999                ', 'aaa', '1']
-        '''
-        #res = re.compile(r'(\d\d\d\s\d\d\d\s\d\d\d)')
-        # >999 999 999                <
-        res = re.compile(r"(\d\d\d\s\d\d\d\s\d\d\d)")
+        '''Number'''
+        # res = re.compile(r'(\d\d\d(\s|-)\d\d\d(\s|-)\d\d\d)')
+
+        res = re.compile(r'(((\+\d\d\s)|(.{0}))(\d\d(\s|-)\d\d\d(\s|-)\d\d(\s|-)\d\d)|(\(\d\d\d\)(\s|-|.)\d\d(\s|-|.)\d\d(\s|-|.)\d\d\d)|(\(\d\d\)(\s|-|.)\d\d(\s|-|.)\d\d\d(\s|-|.)\d\d)|((\s|'')\d{9}(\s|''))|(\d\d\d(\s|-|.)\d\d\d(\s|-|.)\d\d\d)|((\(|'')(\+|'')((00\d\d)|(\d\d)|(''))(\)|'')(\s|-|'')\d\d\d(\s|-|'')\d\d\d(\s|-|'')\d\d\d$))')
+
         return res
 
     def regexComment():
