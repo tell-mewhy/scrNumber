@@ -248,8 +248,4 @@ class CheckFile:
         return toWrite
 
 # UWAGI OGÓLNE:
-# 0. a może dodać jakiś security parametr jeżli będę chciał pobierać niebezpieczne numery? self.security na przykład = 1 i wtedy main.py link, 1
-# 1. ogarnać ten burdel, dodać specjalną funkcje (o ile się da to przerobić) do pobierania danych ze strony o niebezpiecznych numerach, tą pierwszą z finddata, orarnąć też ten self.part i self.counter (counter jest do sprawdzenia ile razy nie udało się wczytać strony)
-# 2. dopisać sprawdzanie danych w zwykłym pliku txt, czyli dodać jakieś znaczniki w funkcjach, dzięki którym będzie wiadomo czy sprawdzać csv czy txt
-
 # set the program to run every e.g. 5 minutes
