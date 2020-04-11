@@ -149,38 +149,24 @@ class Getweb_parser:
             # Open and write data to file
             if len(data) != 0:
 
-                # file = open('PhonesFromWeb.txt', 'a')
-                # file2 = open('PhonesFromWeb.txt','r')
-                # listQ = [x[0:len(x)-1] for x in list(file2)]
-
                 with open("PhonesFromWeb.txt", "r") as f:
                     lines = f.readlines()
                 with open("PhonesFromWeb.txt", "a") as f:
-                    f.write(self.link + '\n')
-                    for i in data:
-                        if i in [x.strip() for x in lines]:
-                            print('{0} is already in the list'.format(i))
-                        else:
-                            f.write(i + '\n')
+                    if self.link not in [x.strip() for x in lines]:
+                        f.write(self.link + '\n')
+                        for i in data:
+                            if i.strip() in [x.strip() for x in lines]:
+                                pass
+                            else:
+                                f.write(i + '\n')
+                    else:
+                        for i in data:
+                            if i.strip() in [x.strip() for x in lines]:
+                                pass
+                            else:
+                                f.write(self.link + '\n')
+                                f.write(i + '\n')
 
-                # file.write(self.link + '\n')
-                # for i in data:
-                #     if self.link in listQ:
-                #         print('----')
-                #         print(self.link)
-                #         print('----')
-                #     if i in listQ:
-                #         print('{0} is already in the list'.format(i))
-                #         pass
-                #     else:
-                #         file.write(i + '\n')
-                # file.close()
-                # file2.close()
-
-                # file.write(self.link + '\n')
-                # for i in data:
-                #     file.write(i + '\n')
-                # file.close()
                 print('The PhonesFromWeb.txt file is updated in the current program folder.\n')
 
             # While loop to check other sites if you need
