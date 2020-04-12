@@ -6,7 +6,6 @@ from datetime import datetime
 from datetime import date
 from time import sleep
 from pprint import pprint
-from OpenFile import openFile
 
 from RegexPage import regexPage as rp
 
@@ -149,6 +148,7 @@ class Getweb_parser:
             # Open and write data to file
             if len(data) != 0:
 
+                check = False
                 with open("PhonesFromWeb.txt", "r") as f:
                     lines = f.readlines()
                 with open("PhonesFromWeb.txt", "a") as f:
@@ -166,11 +166,17 @@ class Getweb_parser:
                             else:
                                 f.write(self.link + '\n')
                                 f.write(i + '\n')
-
-                print('The PhonesFromWeb.txt file is updated in the current program folder.\n')
+                                check = True
+                if check == True:
+                    sleep(1)
+                    print('\nThe PhonesFromWeb.txt file is updated in the current program folder.\n')
+                else:
+                    sleep(1)
+                    print("\nDon't found any phone numbers on site.\n")
 
             # While loop to check other sites if you need
             while True:
+                sleep(2)
                 check = input('\nDo you check other page? [write Y or N and press enter]\n')
                 if isinstance(check, str) == True and check.lower() == 'y':
                     link = input('Paste link and press enter:\n')
@@ -179,7 +185,13 @@ class Getweb_parser:
                     else:
                         print('Wrong link!')
                 if isinstance(check, str) == True and check.lower() == 'n':
-                    print('Thx, bye :)')
+                    print('''
+                    ======  ==    =  ====
+                    =       = =   =  =    =
+                    ===     =  =  =  =     =
+                    =       =   = =  =    =
+                    ======  =    ==  ====
+                    ''')
                     exit()
                 else:
                     print('Wrong data!')
@@ -191,7 +203,7 @@ class Getweb_parser:
         if len(data) == 0:
             pass
         else:
-            f = openFile.file.createFile(self.fileName)
+            f = csv.writer(open(self.fileName+'.csv', 'a')) # w
             f.writerow(['Phone','Comment','Link','Date',self.type])
             for r in data:
                 f.writerow([r[0],r[1],r[2],r[3],r[4]])
