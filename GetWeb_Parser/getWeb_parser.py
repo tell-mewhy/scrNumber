@@ -90,7 +90,6 @@ class Getweb_parser:
                 return Getweb_parser(self.link,self.sign,0,self.counter)
 
         self.counter = 0
-
         return soup
 
     def findData(self):
@@ -131,8 +130,6 @@ class Getweb_parser:
                 print('END')
                 return rov
 
-            # if len(rov) <= 6:
-            #     return rov
             if len(rov) > 5:
                 return Getweb_parser(self.link,self.part)
 
@@ -153,6 +150,7 @@ class Getweb_parser:
                     lines = f.readlines()
                 with open("PhonesFromWeb.txt", "a") as f:
                     if self.link not in [x.strip() for x in lines]:
+                        check = True
                         f.write(self.link + '\n')
                         for i in data:
                             if i.strip() in [x.strip() for x in lines]:
@@ -172,7 +170,7 @@ class Getweb_parser:
                     print('\nThe PhonesFromWeb.txt file is updated in the current program folder.\n')
                 else:
                     sleep(1)
-                    print("\nDon't found any phone numbers on site.\n")
+                    print("\nDon't found any phone numbers on site or numbers is in file.\n")
 
             # While loop to check other sites if you need
             while True:
